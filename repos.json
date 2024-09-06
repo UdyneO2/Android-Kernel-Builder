@@ -1,9 +1,9 @@
 [  {
     "kernelSource": {
-      "name": "Lineage",
-      "repo": "https://github.com/nurfinzmuhamad14/android_kernel_realme_RMX2195.git",
-      "branch": "LineageOS",
-      "device": "RMX2195"
+      "name": "UdyneOS",
+      "repo": "https://github.com/UdyneO2/android_kernel_oppo_mt6750/",
+      "branch": "5.1",
+      "device": "f1s"
     },
     "withKernelSU": false,
     "toolchains": [
