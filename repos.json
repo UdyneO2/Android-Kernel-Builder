@@ -9,8 +9,8 @@
     "toolchains": [
       {
         "repo": "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9",
-        "branch": "11",
-        "name": "clang"
+        "branch": "android-6.0.1_r32",
+        "name": "gcc"
       }
     ],
     "params": {
