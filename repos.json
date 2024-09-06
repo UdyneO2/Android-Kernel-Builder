@@ -10,7 +10,7 @@
       {
         "repo": "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9",
         "branch": "android-6.0.1_r32",
-        "name": "gcc"
+        "name": "aarch64-linux-android-4.9"
       }
     ],
     "params": {
