@@ -2,7 +2,7 @@
     "kernelSource": {
       "name": "UdyneOS",
       "repo": "https://github.com/UdyneO2/android_kernel_oppo_mt6750/",
-      "branch": "5.1",
+      "branch": "test",
       "device": "f1s"
     },
     "withKernelSU": false,
