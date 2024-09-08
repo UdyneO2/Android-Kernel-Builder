@@ -18,11 +18,11 @@
       "CROSS_COMPILE": "aarch64-linux-android-"
     },
     "anykernelSource": {
-      "name": "UdyneOS",
+      "name": "update-f1s",
       "use": true,
       "release": true,
-      "repo": "https://github.com/nurfinzmuhamad14/AnyKernel3",
-      "branch": "RMX2195"
+      "repo": "https://github.com/UdyneO2/AnyKernel3.git",
+      "branch": "master"
     }
    },
 ]
