@@ -185,6 +185,13 @@ jobs:
           path: ./${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/Image.gz
           if-no-files-found: ignore
           retention-days: 7
+      - name: "💙 Upload Image.gz-dtb"
+        uses: actions/upload-artifact@v4
+        with:
+          name: Image.gz-dtb(${{ env.kernelDevice }}-${{ env.kernelName }}-${{ env.kernelBranch }})
+          path: ./${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/Image.gz
+          if-no-files-found: ignore
+          retention-days: 7
 
       - name: "💜 Upload dtb"
         uses: actions/upload-artifact@v4
