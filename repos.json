@@ -15,10 +15,7 @@
     ],
     "params": {
       "ARCH": "arm64",
-      "CROSS_COMPILE": "aarch64-linux-android-",
-      "CROSS_COMPILE_ARM32": "arm-linux-gnueabi-",
-      "CROSS_COMPILE_COMPAT": "arm-linux-gnueabi-",
-      
+      "CROSS_COMPILE": "aarch64-linux-android-"
     },
     "anykernelSource": {
       "name": "UdyneOS",
