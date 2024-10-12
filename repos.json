@@ -1,24 +1,24 @@
 [  {
     "kernelSource": {
-      "name": "UdyneOS",
-      "repo": "https://github.com/UdyneO2/android_kernel_oppo_mt6750/",
-      "branch": "test",
-      "device": "f1s"
+      "name": "Customkernel",
+      "repo": "https://github.com/UdyneO2/android_kernel_samsung_exynos3475",
+      "branch": "UdyneOS",
+      "device": "j1xlte"
     },
     "withKernelSU": false,
     "toolchains": [
       {
-        "repo": "https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9",
-        "branch": "android-6.0.1_r32",
-        "name": "aarch64-linux-android-4.9"
+        "repo": "https://github.com/Exynos3475/android_prebuilts_gcc_linux-x86_arm_arm-eabi-4.8",
+        "branch": "android-7.1.2_r36",
+        "name": "arm-eabi-4.8"
       }
     ],
     "params": {
-      "ARCH": "arm64",
-      "CROSS_COMPILE": "aarch64-linux-android-"
+      "ARCH": "arm",
+      "CROSS_COMPILE": "arm-eabi-4.8"
     },
     "anykernelSource": {
-      "name": "update-f1s",
+      "name": "Beta",
       "use": true,
       "release": true,
       "repo": "https://github.com/UdyneO2/AnyKernel3.git",
