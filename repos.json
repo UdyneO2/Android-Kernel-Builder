@@ -10,12 +10,12 @@
       {
         "repo": "https://github.com/Exynos3475/android_prebuilts_gcc_linux-x86_arm_arm-eabi-4.8",
         "branch": "android-7.1.2_r36",
-        "name": "arm-eabi-4.8"
+        "name": "android-7.1.2_r36"
       }
     ],
     "params": {
       "ARCH": "arm",
-      "CROSS_COMPILE": "arm-linux-gnueabi-"
+      "CROSS_COMPILE": "arm-eabi-"
     },
     "anykernelSource": {
       "name": "Beta",
