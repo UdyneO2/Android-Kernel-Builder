@@ -62,7 +62,7 @@ jobs:
       - name: "🌟 Clone kernel source => (${{ env.kernelRepo }})"
         working-directory: ./${{ env.kernelDir }}
         run: |
-          git clone --recursive --branch $kernelBranch $kernelRepo $kernelName --depth=1
+          git clone --branch $kernelBranch $kernelRepo $kernelName --depth=1
 
       - name: "💫 Get toolchains"
         working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
@@ -75,7 +75,7 @@ jobs:
             name=$(echo $toolchains | jq -r ".[$i].name")
             repo=$(echo $toolchains | jq -r ".[$i].repo")
             branch=$(echo $toolchains | jq -r ".[$i].branch")
-            git clone --recursive --branch $branch $repo $name --depth=1
+            git clone --branch $branch $repo $name
             echo "$(pwd)/$name/" >> $GITHUB_PATH
             echo "$(pwd)/$name/bin" >> $GITHUB_PATH
           done
@@ -140,7 +140,7 @@ jobs:
           args: ${{ steps.generate-args.outputs.args }}
         run: |
           echo "PATH Variable: $PATH"
-          make ${args} CONFIG_DEBUG_SECTION_MISMATCH=y
+          make ${args}
 
       - name: "📦 Package kernel with AnyKernel3"
         if: ${{ env.ANYKERNEL_ON == 'true' }}
