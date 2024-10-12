@@ -15,7 +15,7 @@
     ],
     "params": {
       "ARCH": "arm",
-      "CROSS_COMPILE": "arm-eabi-4.8"
+      "CROSS_COMPILE": "arm-linux-gnueabi-"
     },
     "anykernelSource": {
       "name": "Beta",
