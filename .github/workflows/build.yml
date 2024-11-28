@@ -51,10 +51,10 @@ jobs:
 
       withKernelSU: ${{ matrix.repos.withKernelSU }}
     steps:
-      - name: "🖥️ Setup/Start tmate SSH session"
-        uses: mxschmitt/action-tmate@v3.18
-        with:
-          detached: true
+     # - name: "🖥️ Setup/Start tmate SSH session"
+        #uses: mxschmitt/action-tmate@v3.18
+       # with:
+         # detached: true
 
       - name: "✨ Create working dir"
         run: mkdir -p $kernelDir
