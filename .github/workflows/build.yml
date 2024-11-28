@@ -69,8 +69,8 @@ jobs:
         run: |
           git clone --recursive --branch $kernelBranch $kernelRepo $kernelName --depth=1
           git clone --recursive https://github.com/UdyneO2/kernel_vendor_R.git ./vendor --depth=1
-          mv vendor/source/android/vendor /vendor
-          mv vendor/source/android/kernel /kernel
+          mv vendor/source/android/vendor vendor/
+          mv vendor/source/android/kernel kernel/
 
       - name: "💫 Get toolchains"
         working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
