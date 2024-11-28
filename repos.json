@@ -1,8 +1,8 @@
 [  {
     "kernelSource": {
       "name": "Lineage",
-      "repo": "https://github.com/nurfinzmuhamad14/android_kernel_realme_RMX2195.git",
-      "branch": "LineageOS",
+      "repo": "https://github.com/UdyneO2/device_realme_kernel.git",
+      "branch": "lineage-17",
       "device": "RMX2195"
     },
     "withKernelSU": false,
