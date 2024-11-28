@@ -1,6 +1,6 @@
 [  {
     "kernelSource": {
-      "name": "Lineage",
+      "name": "lineage",
       "repo": "https://github.com/UdyneO2/device_realme_kernel.git",
       "branch": "lineage-17",
       "device": "RMX2195"
