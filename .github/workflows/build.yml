@@ -57,7 +57,10 @@ jobs:
          # detached: true
 
       - name: "✨ Create working dir"
-        run: mkdir $kernelDir
+        run: |
+         mkdir android
+         cd android
+         mkdir devices
           
 
       - name: "⭐ Install prerequisites"
