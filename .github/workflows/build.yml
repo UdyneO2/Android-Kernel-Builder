@@ -71,6 +71,7 @@ jobs:
       - name: "🌟 Clone kernel source => (${{ env.kernelRepo }})"
         working-directory: ./${{ env.kernelDir }}
         run: |
+          cd ..
           git clone https://github.com/UdyneO2/vendor.git tmp
           mv tmp/kernel kernel
           mv tmp/vendor vendor
