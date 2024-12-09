@@ -35,7 +35,7 @@ jobs:
       matrix:
         repos: ${{ fromJSON(needs.Set-repos.outputs.repos) }}
     env:
-      kernelDir: ${{ matrix.repos.kernelSource.name }}_${{ matrix.repos.kernelSource.device }}
+      kernelDir: android/devices
 
       kernelName: ${{ matrix.repos.kernelSource.name }}
       kernelRepo: ${{ matrix.repos.kernelSource.repo }}
@@ -57,7 +57,7 @@ jobs:
          # detached: true
 
       - name: "✨ Create working dir"
-        run: mkdir -p $kernelDir
+        run: mkdir $kernelDir
           
 
       - name: "⭐ Install prerequisites"
@@ -68,16 +68,14 @@ jobs:
       - name: "🌟 Clone kernel source => (${{ env.kernelRepo }})"
         working-directory: ./${{ env.kernelDir }}
         run: |
-          cd ..
-          git clone --recursive https://github.com/UdyneO2/kernel_vendor_R vendor --depth=1
-          mv vendor/source/android/vendor vendor/
-          mv vendor/source/android/kernel kernel/
-          
+          git clone https://github.com/UdyneO2/vendor.git tmp
+          mv tmp/kernel kernel
+          mv tmp/vendor vendor
         
       - name: "🌟 Clone kernel source => (${{ env.kernelRepo }})"
         working-directory: ./${{ env.kernelDir }}
         run: |
-          git clone --recursive --branch $kernelBranch $kernelRepo $kernelName --depth=1
+          git clone --recursive --branch $kernelBranch $kernelRepo kernel --depth=1
           
 
       - name: "💫 Get toolchains"
