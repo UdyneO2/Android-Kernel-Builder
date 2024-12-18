@@ -1,8 +1,8 @@
 [  {
     "kernelSource": {
-      "name": "beta",
-      "repo": "https://github.com/UdyneO2/device_realme_kernel.git",
-      "branch": "master",
+      "name": "los-20",
+      "repo": "https://github.com/UdyneO2/android_kernel_sm4250",
+      "branch": "lineage-20",
       "device": "RMX2195"
     },
     "withKernelSU": false,
@@ -29,7 +29,7 @@
     },
     "anykernelSource": {
       "name": "UdyneOS",
-      "use": true,
+      "use": false,
       "release": true,
       "repo": "https://github.com/nurfinzmuhamad14/AnyKernel3",
       "branch": "RMX2195"
