@@ -1,7 +1,7 @@
 [  {
     "kernelSource": {
-      "name": "beta",
-      "repo": "https://github.com/UdyneO2/device_realme_kernel.git",
+      "name": "beers",
+      "repo": "https://github.com/UdyneO2/kernel",
       "branch": "master",
       "device": "RMX2195"
     },
