@@ -1,0 +1,86 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Kernel Builder
+on:
+  workflow_dispatch:
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+    env:
+      kernelDir: workspaces/source
+      OUT_DIR: "out"
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v4
+
+      # Runs a single command using the runners shell
+      - name: Run a one-line script
+        run: mkdir -p workspace
+
+      # Runs a set of commands using the runners shell
+      - name: Run a multi-line script
+        run: |
+          # install toolchain and make tools for build kernel
+          mkdir -p source; cd source;
+        working-directory: workspace
+      - name: "🌟 Clone kernel source => (${{ env.kernelRepo }})"
+        working-directory: ./${{ env.kernelDir }}
+        run: |
+          cd ..
+          git clone https://github.com/UdyneO2/vendor.git tmp
+          mv tmp/kernel kernel
+          mv tmp/vendor vendor
+
+      - name: git clone kernel
+        run: |
+          git clone https://github.com/UdyneO2/device_realme_kernel.git realme --depth=1
+        working-directory: ./${{ env.kernelDir }}
+      - name: "⭐ Install prerequisites"
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential bc curl git zip ftp gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi libssl-dev lftp zstd wget libfl-dev python2 python3 libarchive-tools device-tree-compiler zsh
+      - name: mkdir prebuild
+        run: |
+          git clone https://android.googlesource.com/platform/prebuilts/build-tools;
+          git clone https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86;
+          git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9
+          export SOURCE_ROOT=~/workspace/source
+          export DEFCONFIG=lahaina_defconfig
+          export MAKE_PATH=${SOURCE_ROOT}/prebuilts/build-tools/linux-x86/bin/
+          export CROSS_COMPILE=${SOURCE_ROOT}/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin/aarch64-linux-android-
+          export KERNEL_ARCH=arm64
+          export KERNEL_DIR=${SOURCE_ROOT}/msm-5.4
+          export KERNEL_OUT=${KERNEL_DIR}/../kernel_out
+          export KERNEL_SRC=${KERNEL_OUT}
+          export CLANG_TRIPLE=aarch64-linux-gnu-
+          export OUT_DIR=${KERNEL_OUT}
+          export ARCH=${KERNEL_ARCH}
+          export TARGET_INCLUDES=${TARGET_KERNEL_MAKE_CFLAGS}
+          export TARGET_LINCLUDES=${TARGET_KERNEL_MAKE_LDFLAGS}
+          export PATH=${SOURCE_ROOT}/prebuilts/clang/host/linux-x86/clang-r383902/bin:$PATH
+          TARGET_KERNEL_MAKE_ENV+="HOSTCC=${SOURCE_ROOT}/prebuilts/clang/host/linux-x86/clang-r383902/bin/clang "
+          TARGET_KERNEL_MAKE_ENV+="CC=${SOURCE_ROOT}/prebuilts/clang/host/linux-x86/clang-r383902/bin/clang "
+          TARGET_KERNEL_MAKE_ENV+="LLVM=${SOURCE_ROOT}/prebuilts/clang/host/linux-x86/clang-r383902/bin/clang"
+          (cd ${KERNEL_DIR} && \
+          ${MAKE_PATH}make V=1 O=${OUT_DIR} ${TARGET_KERNEL_MAKE_ENV} ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} CFLAGS="${TARGET_INCLUDES}" LDFLAGS="${TARGET_LINCLUDES}" ${DEFCONFIG})
+          (cd ${OUT_DIR} && \
+          ${MAKE_PATH}make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} CFLAGS="${TARGET_INCLUDES}" LDFLAGS="${TARGET_LINCLUDES}" O=${OUT_DIR} ${TARGET_KERNEL_MAKE_ENV} -j$(nproc))
+        working-directory: ./${{ env.kernelDir }}
+      - name: Upload to Release
+        uses: softprops/action-gh-release@4634c16e79c963813287e889244c50009e7f0981
+        with:
+          files: |
+           ${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/dtbo.img
+           ${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/Image.gz
+           ${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/Image
+          name: ${{ inputs.DEVICE_NAME }} Kernel test
+          tag_name: ${{ github.run_id }}
+          body: |
+           Test Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
