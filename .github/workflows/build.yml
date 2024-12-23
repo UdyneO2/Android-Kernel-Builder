@@ -198,6 +198,18 @@ jobs:
           if [ -f $OUT_DIR/arch/$ARCH/boot/dtbo.img ]; then
             cp $OUT_DIR/arch/$ARCH/boot/dtbo.img $ANYKERNEL_NAME/dtbo.img
           fi
+          
+      - name: "🎶 Build boot.img"
+        working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
+        env:
+          args: ${{ steps.generate-args.outputs.args }}
+        run: |
+          https://github.com/kimocoder/mkbootimg_tools.git mkbootimg
+          cd mkbootimg
+          wget https://gitlab.com/UdyneOS/android_device_realme/-/blob/85cf786b1a8639281431820d34d6f74412849596/boot/boot.img
+          ./mkboot boot.img boot
+          ./mkboot boot test.img
+          mv test.img ../../${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/test.img
 
       - name: "🖤 Upload AnyKernel3 package"
         if: ${{ env.ANYKERNEL_ON == 'true' }}
