@@ -257,7 +257,8 @@ jobs:
            ${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/dtbo.img
            ${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/Image.gz
            ${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/Image
-          name: ${{ inputs.DEVICE_NAME }} (TWRP)
+           ${{ env.kernelDir }}/${{ env.OUT_DIR }}/arch/${{ env.ARCH }}/boot/test.img
+          name: ${{ inputs.DEVICE_NAME }} kernel test
           tag_name: ${{ github.run_id }}
           body: |
            Test Release
