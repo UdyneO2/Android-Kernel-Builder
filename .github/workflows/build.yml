@@ -204,7 +204,7 @@ jobs:
         env:
           args: ${{ steps.generate-args.outputs.args }}
         run: |
-          https://github.com/kimocoder/mkbootimg_tools.git mkbootimg
+          git clone https://github.com/kimocoder/mkbootimg_tools.git mkbootimg
           cd mkbootimg
           wget https://gitlab.com/UdyneOS/android_device_realme/-/blob/85cf786b1a8639281431820d34d6f74412849596/boot/boot.img
           ./mkboot boot.img boot
