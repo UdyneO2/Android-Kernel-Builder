@@ -49,12 +49,12 @@ jobs:
           git clone https://android.googlesource.com/platform/prebuilts/build-tools;
           git clone https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86;
           git clone https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9
-          export SOURCE_ROOT=~/workspace/source
-          export DEFCONFIG=lahaina_defconfig
+          export SOURCE_ROOT=./${{ env.kernelDir }}
+          export DEFCONFIG=RMX2195_defconfig
           export MAKE_PATH=${SOURCE_ROOT}/prebuilts/build-tools/linux-x86/bin/
           export CROSS_COMPILE=${SOURCE_ROOT}/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin/aarch64-linux-android-
           export KERNEL_ARCH=arm64
-          export KERNEL_DIR=${SOURCE_ROOT}/msm-5.4
+          export KERNEL_DIR=${SOURCE_ROOT}/realme
           export KERNEL_OUT=${KERNEL_DIR}/../kernel_out
           export KERNEL_SRC=${KERNEL_OUT}
           export CLANG_TRIPLE=aarch64-linux-gnu-
