@@ -73,8 +73,8 @@ jobs:
         run: |
           cd ..
           git clone https://github.com/UdyneO2/vendor.git tmp
-          mv tmp/kernel kernel
-          mv tmp/vendor vendor
+          mv tmp/source/android/kernel kernel
+          mv tmp/source/android/vendor vendor
         
       - name: "🌟 Clone kernel source => (${{ env.kernelRepo }})"
         working-directory: ./${{ env.kernelDir }}
