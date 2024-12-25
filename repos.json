@@ -1,9 +1,9 @@
 [  {
     "kernelSource": {
       "name": "beta",
-      "repo": "https://github.com/UdyneO2/device_realme_kernel.git",
+      "repo": "https://github.com/UdyneO2/kernel_realme_qcom.git",
       "branch": "master",
-      "device": "RMX2195"
+      "device": "bengal-perf_defconfig"
     },
     "withKernelSU": false,
     "toolchains": [
