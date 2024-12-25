@@ -3,7 +3,7 @@
       "name": "beta",
       "repo": "https://github.com/UdyneO2/kernel_realme_qcom.git",
       "branch": "master",
-      "device": "bengal-perf
+      "device": "bengal-perf"
     },
     "withKernelSU": false,
     "toolchains": [
