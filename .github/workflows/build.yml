@@ -72,7 +72,7 @@ jobs:
         working-directory: ./${{ env.kernelDir }}
         run: |
           cd ..
-          git clone https://github.com/UdyneO2/vendor.git tmp
+          git clone https://github.com/UdyneO2/realme_vendor_qcom.git tmp
           mv tmp/source/android/kernel kernel
           mv tmp/source/android/vendor vendor
         
