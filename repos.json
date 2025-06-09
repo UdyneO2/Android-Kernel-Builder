@@ -1,16 +1,16 @@
 [  {
     "kernelSource": {
-      "name": "4.19.191_mt6765",
-      "repo": "https://github.com/1ndev-ui/Kernel-MT6765-4.19.191-Generic",
-      "branch": "4.19.191_mt6765_dev",
-      "device": "k65v1_64_bsp"
+      "name": "lancelot-ksunext",
+      "repo": "https://github.com/UdyneO2/android_kernel_xiaomi_mt6768",
+      "branch": "KSUNEXT",
+      "device": "lancelot"
     },
     "anykernelSource": {
-        "repo": "https://github.com/1ndev-ui/AnyKernel3",
-        "branch": "dev",
+        "repo": "https://github.com/UdyneO2/Anykernel",
+        "branch": "lancelot",
         "name": "AnyKernel3"
     },
-    "withKernelSU": false,
+    "withKSUN": true,
     "toolchains": [
       {
         "repo": "https://android.googlesource.com/platform/prebuilts/gas/linux-x86",
