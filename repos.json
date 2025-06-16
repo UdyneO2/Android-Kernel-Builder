@@ -1,14 +1,14 @@
 [  {
     "kernelSource": {
-      "name": "4.19.152_RMX2195",
+      "name": "RMX2195-Sky",
       "repo": "https://github.com/nurfinzmuhamad14/kernel_realme_sm4250",
-      "branch": "stable",
+      "branch": "Stable-v0.4-old",
       "device": "RMX2195"
     },
     "anykernelSource": {
         "repo": "https://github.com/insetion/AnyKernel3",
         "branch": "RMX2195",
-        "name": "AnyKernel3"
+        "name": "AnyKernel3-X"
     },
     "withKernelSU": false,
     "toolchains": [
