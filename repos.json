@@ -1,8 +1,8 @@
 [  {
     "kernelSource": {
-      "name": "RMX2195-StarX",
+      "name": "RMX2195-StarX-OC",
       "repo": "https://github.com/udyneo2/kernel_realme_sm4250",
-      "branch": "upstreamv2",
+      "branch": "stable",
       "device": "RMX2195"
     },
     "anykernelSource": {
