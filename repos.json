@@ -1,8 +1,8 @@
 [  {
     "kernelSource": {
-      "name": "RMX2195-StarX",
+      "name": "StarX-Upstream",
       "repo": "https://github.com/UdyneO2/StarX-prjkt",
-      "branch": "upstream",
+      "branch": "beta",
       "device": "RMX2195"
     },
     "anykernelSource": {
