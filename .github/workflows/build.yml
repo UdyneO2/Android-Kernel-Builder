@@ -52,7 +52,7 @@ jobs:
       fail-fast: false
     env:
       kernelDir: dir_${{ inputs.NAME}}
-      kernelName: ${{ inputs.NAME}
+      kernelName: ${{ inputs.NAME}}
       kernelRepo: ${{ inputs.TREE }}
       kernelBranch: ${{ inputs.BR }}
       kernelDevice: ${{ inputs.DEVICE }}
