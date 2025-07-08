@@ -58,11 +58,11 @@ jobs:
       kernelDevice: ${{ inputs.DEVICE }}
       ANYKERNEL_NAME: Anykernel3
       ANYKERNEL_SOURCE: ${{ inputs.AK3 }}
-      ANYKERNEL_SOURCE_BRANCH: ${{ = }}
+      ANYKERNEL_SOURCE_BRANCH: ${{ inputs.AK3_BR }}
       DEFCONFIG_NAME: vendor/${{ inputs.DEVICE }}_defconfig
       withKSUN: ${{ inputs.KSU }}
       ARCH: arm64
-      temp: ${{ env.kernelName }}/out
+      temp: dir_${{ inputs.NAME }}/out
       ROOT: ~/
       
     steps:
