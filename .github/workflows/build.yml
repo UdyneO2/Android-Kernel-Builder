@@ -36,7 +36,7 @@ on:
         required: true
         default: 'RMX2195'
       KSU:
-        description: 'kernel Branch'
+        description: 'KernelSU'
         required: true
         default: 'true'
         type: choice
