@@ -18,7 +18,7 @@ on:
       AK3:
         description: 'Anykernel Tree'
         required: true
-        default: 'https://github.com/UdyneO2/Anykernel3'
+        default: 'https://github.com/UdyneO2/Anykernel'
       CLANG:
         description: 'clang compiler'
         required: true
@@ -43,6 +43,10 @@ on:
         options:
         - true
         - false
+      SET-KSU:
+        description: 'Setup Kernel-SU'
+        required: true
+        default: '"https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s main'    
       REL:
         description: 'Release repo'
         required: true
@@ -68,9 +72,9 @@ jobs:
       ARCH: arm64
       OUT_DIR: out
       XCLANG: ${{ inputs.CLANG }}
-      ROOT: /home/runner/work/
+      ROOT: /home/runner/work
       REL: ${{ inputs.REL }}
-      
+      SET-KSU: ${{ inputs.SET-KSU }}
     steps:
       - name: "✨ Create working dir"
         run: mkdir -p $KDIR
@@ -88,6 +92,17 @@ jobs:
         working-directory: ./${{ env.KDIR }}/${{ env.KNAME }}
         if: ${{ env.withKSUN == 'true' }}
         run: |
+          if [ -d "./KernelSU" ]; then
+            rm -rf "./KernelSU"
+          fi
+          if [ -d "./KernelSU-Next" ]; then
+            rm -rf "./KernelSU-Next"
+          fi
+          if [ -d "./drivers/kernelsu" ]; then
+            rm -rf "./drivers/kernelsu"
+          fi
+          curl -LSs $SET-KSU
+          
           cat ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }} | grep KSU
 
       - name: "🎶 Build kernel"
@@ -125,7 +140,7 @@ jobs:
           else
             echo -e "Image.gz not found"
             echo -e "Do find"
-            find $ROOT/$KDIR/$KNAME -type f -name 2>/dev/null | grep "Image.gz"
+            find $ROOT/$KDIR/$KNAME -type f 2>/dev/null | grep "Image.gz"
           fi
           if [[ -f $ROOT/$KDIR/$KNAME/$OUT_DIR/arch/$ARCH/boot/Image ]]; then
             cp $ROOT/$KDIR/$KNAME/$OUT_DIR/arch/$ARCH/boot/Image $ROOT/$KDIR/$ANYKERNEL_NAME/Image
