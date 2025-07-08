@@ -19,7 +19,7 @@ on:
         description: 'Anykernel Tree'
         required: true
         default: 'https://github.com/UdyneO2/Anykernel3'
-      clang_src :
+      CLANG:
         description: 'clang compiler'
         required: true
         default: 'https://github.com/techyminati/android_prebuilts_clang_host_linux-x86_clang-6443078'
@@ -63,6 +63,7 @@ jobs:
       withKSUN: ${{ inputs.KSU }}
       ARCH: arm64
       temp: dir_${{ inputs.NAME }}/out
+      XCLANG: ${{ inputs.CLANG }}
       ROOT: ~/
       
     steps:
@@ -89,7 +90,7 @@ jobs:
         run: |
           export KBUILD_BUILD_USER="mnrdnn"
           export KBUILD_BUILD_HOST="github"
-          git clone $clang_src ~/toolchains/clang --depth=1 
+          git clone $XCLANG ~/toolchains/clang --depth=1 
           export CLANG_PATH=~/toolchains/clang/bin
           export PATH=${CLANG_PATH}:${PATH}
           export ARCH=arm64
