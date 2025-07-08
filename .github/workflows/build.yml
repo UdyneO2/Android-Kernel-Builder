@@ -137,7 +137,7 @@ jobs:
          repository: UdyneO2/kernel_realme_RMX2195
          files: |
            ../Release-${{ env.kernelName }}-${{ inputs.DEVICE }}.zip
-      - name: Update Kernel Build | ${{ env.ANYKERNEL_NAME }}-${{ inputs.DEVICE }}
+         name: Update Kernel Build | ${{ env.ANYKERNEL_NAME }}-${{ inputs.DEVICE }}
          tag_name: ${{ env.kernel }}/
          body: |
           ### Release Notes:
