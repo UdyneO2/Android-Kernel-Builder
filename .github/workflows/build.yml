@@ -43,6 +43,10 @@ on:
         options:
         - true
         - false
+      REL:
+        description: 'Release repo'
+        required: true
+        default: 'UdyneO2/kernel_realme_RMX2195'
 jobs:
   Build-Kernel:
     name: "🐎 Build kernel"
@@ -51,42 +55,43 @@ jobs:
       max-parallel: 2
       fail-fast: false
     env:
-      kernelDir: dir_${{ inputs.NAME}}
-      kernelName: ${{ inputs.NAME}}
+      KDIR: dir_${{ inputs.NAME}}
+      KNAME: ${{ inputs.NAME}}
       kernelRepo: ${{ inputs.TREE }}
       kernelBranch: ${{ inputs.BR }}
-      kernelDevice: ${{ inputs.DEVICE }}
+      DEVICE: ${{ inputs.DEVICE }}
       ANYKERNEL_NAME: Anykernel3
       ANYKERNEL_SOURCE: ${{ inputs.AK3 }}
       ANYKERNEL_SOURCE_BRANCH: ${{ inputs.AK3_BR }}
       DEFCONFIG_NAME: vendor/${{ inputs.DEVICE }}_defconfig
       withKSUN: ${{ inputs.KSU }}
       ARCH: arm64
-      temp: dir_${{ inputs.NAME }}/out
+      OUT_DIR: out
       XCLANG: ${{ inputs.CLANG }}
-      ROOT: ~/
+      ROOT: /home/runner/work/
+      REL: ${{ inputs.REL }}
       
     steps:
       - name: "✨ Create working dir"
-        run: mkdir -p $kernelDir
+        run: mkdir -p $KDIR
 
       - name: "⭐ Install prerequisites"
         run: |
           sudo apt-get update
           sudo apt update && sudo apt install bc  bison  build-essential  ccache   curl  flex  git libelf-dev libssl-dev lzop  python3  rsync unzip  zlib1g-dev gcc gcc-aarch64-linux-gnu gcc-arm-linux-gnueabi make libncurses5-dev libncursesw5-dev wget
       - name: "🌟 Clone kernel source => (${{ env.kernelRepo }})"
-        working-directory: ./${{ env.kernelDir }}
+        working-directory: ./${{ env.KDIR }}
         run: |
-          git clone --recursive --branch $kernelBranch $kernelRepo $kernelName --depth=1
+          git clone --recursive --branch $kernelBranch $kernelRepo $KNAME --depth=1
           
       - name: "😋 Update KernelSU-Next"
-        working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
+        working-directory: ./${{ env.KDIR }}/${{ env.KNAME }}
         if: ${{ env.withKSUN == 'true' }}
         run: |
           cat ./arch/arm64/configs/${{ env.DEFCONFIG_NAME }} | grep KSU
 
       - name: "🎶 Build kernel"
-        working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
+        working-directory: ./${{ env.KDIR }}/${{ env.KNAME }}
         run: |
           export KBUILD_BUILD_USER="mnrdnn"
           export KBUILD_BUILD_HOST="github"
@@ -111,23 +116,24 @@ jobs:
           echo "Build Succesfully"
 
       - name: "📦 Package kernel with AnyKernel3"
-        working-directory: ./${{ env.kernelDir }}
+        working-directory: ./${{ env.KDIR }}
         run: |
-          git clone --depth=1 $ANYKERNEL_SOURCE -b $ANYKERNEL_SOURCE_BRANCH $ANYKERNEL_NAME && rm -rf $ANYKERNEL_NAME/.git $ANYKERNEL_NAME/.github $ANYKERNEL_NAME/LICENSE $ANYKERNEL_NAME/README.md
-          if [[ -f $temp/arch/$ARCH/boot/Image.gz ]]; then
-            cp $temp/arch/$ARCH/boot/Image.gz $ANYKERNEL_NAME/Image.gz
+          git clone --depth=1 $ANYKERNEL_SOURCE -b $ANYKERNEL_SOURCE_BRANCH $ROOT/$KDIR/$ANYKERNEL_NAME && rm -rf $ROOT/$KDIR/$ANYKERNEL_NAME/.git $ROOT/$KDIR/$ANYKERNEL_NAME/.github $ROOT/$KDIR/$ANYKERNEL_NAME/LICENSE $ROOT/$KDIR/$ANYKERNEL_NAME/README.md
+          if [[ -f $ROOT/$KDIR/$KNAME/$ROOT/$KDIR/$KNAME/$OUT_DIR/arch/$ARCH/boot/Image.gz ]]; then
+            cp $ROOT/$KDIR/$KNAME/$OUT_DIR/arch/$ARCH/boot/Image.gz $ROOT/$KDIR/$ANYKERNEL_NAME/Image.gz
             echo -e "Image.gz found"
           else
             echo -e "Image.gz not found"
             echo -e "Do find"
-            find . -type f 2>/dev/null | grep "Image.gz"
+            find $ROOT/$KDIR/$KNAME -type f -name 2>/dev/null | grep "Image.gz"
           fi
-          if [[ -f $temp/arch/$ARCH/boot/Image ]]; then
-            cp $temp/arch/$ARCH/boot/Image $ANYKERNEL_NAME/Image
+          if [[ -f $ROOT/$KDIR/$KNAME/$OUT_DIR/arch/$ARCH/boot/Image ]]; then
+            cp $ROOT/$KDIR/$KNAME/$OUT_DIR/arch/$ARCH/boot/Image $ROOT/$KDIR/$ANYKERNEL_NAME/Image
           fi
-          cd $ANYKERNEL_NAME && zip -r9 Release-${{ env.kernelName }}-${{ inputs.DEVICE }}.zip *
-      
-          mv Release-${{ env.kernelName }}-${{ inputs.DEVICE }}.zip ../{{ env.kernelName }}-${{ inputs.DEVICE }}.zip
+          cd $ROOT/$KDIR/$ANYKERNEL_NAME && zip -r9 Release-$KNAME-$DEVICE.zip *
+          
+          mkdir -p $ROOT/$KDIR/release
+          mv Release-$KNAME-$DEVICE.zip $ROOT/$KDIR/release/Release-$KNAME-$DEVICE.zip
           echo ""
           echo -e "Upload Anykernel3.zip"
           echo ""
@@ -135,10 +141,10 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
          token: ${{ secrets.GH_TOKEN }}
-         repository: UdyneO2/kernel_realme_RMX2195
+         repository: $REL
          files: |
-           ../Release-${{ env.kernelName }}-${{ inputs.DEVICE }}.zip
-         name: Update Kernel Build | ${{ env.ANYKERNEL_NAME }}-${{ inputs.DEVICE }}
+           $ROOT/$KDIR/release/Release-$KNAME-$DEVICE.zip
+         name: Update Kernel Build | ${{ env.ANYKERNEL_NAME }}-$DEVICE
          tag_name: ${{ env.kernel }}/
          body: |
           ### Release Notes:
@@ -155,6 +161,6 @@ jobs:
           * - bugs? tell [me](https://t.me/mnrdnn)
       - uses: actions/upload-artifact@v4
         with:
-          name: Release-${{ env.kernelName }}-${{ inputs.DEVICE }}
-          path: ./$ANYKERNEL_NAME/*
+          name: Release-$KNAME-$DEVICE
+          path: $ROOT/$KDIR/$ANYKERNEL_NAME/*
 
