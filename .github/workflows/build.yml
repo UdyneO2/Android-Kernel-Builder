@@ -127,7 +127,7 @@ jobs:
           echo ""
           echo -e "Upload Anykernel3.zip"
           echo ""
-          ls $ANYKERNEL_NAME
+          
       - uses: softprops/action-gh-release@v2
         with:
          token: ${{ secrets.GH_TOKEN }}
