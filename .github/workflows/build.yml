@@ -109,23 +109,18 @@ jobs:
           make CC=clang AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip O=out -j$(nproc --all)
           echo
           echo "Build Succesfully"
-
-      - name: "📦 Package kernel with AnyKernel3"
-        working-directory: ./${{ env.KDIR }}
-        run: |
-          git clone --depth=1 $ANYKERNEL_SOURCE -b $ANYKERNEL_SOURCE_BRANCH $ROOT/$KDIR/$ANYKERNEL_NAME && rm -rf $ROOT/$KDIR/$ANYKERNEL_NAME/.git $ROOT/$KDIR/$ANYKERNEL_NAME/.github $ROOT/$KDIR/$ANYKERNEL_NAME/LICENSE $ROOT/$KDIR/$ANYKERNEL_NAME/README.md
-          if [[ -f $ROOT/$KDIR/$KNAME/$ROOT/$KDIR/$KNAME/$OUT_DIR/arch/$ARCH/boot/Image.gz ]]; then
-            cp $ROOT/$KDIR/$KNAME/$OUT_DIR/arch/$ARCH/boot/Image.gz $ROOT/$KDIR/$ANYKERNEL_NAME/Image.gz
+          
+          git clone --depth=1 $ANYKERNEL_SOURCE -b $ANYKERNEL_SOURCE_BRANCH $ANYKERNEL_NAME && rm -rf $ANYKERNEL_NAME/.git $ANYKERNEL_NAME/.github $ANYKERNEL_NAME/LICENSE $ANYKERNEL_NAME/README.md
+          if [[ -f $OUT_DIR/arch/$ARCH/boot/Image.gz ]]; then
+            cp $OUT_DIR/arch/$ARCH/boot/Image.gz $ANYKERNEL_NAME/Image.gz
             echo -e "Image.gz found"
           else
             echo -e "Image.gz not found"
-            echo -e "Do find"
-            find $ROOT/$KDIR/$KNAME -type f 2>/dev/null | grep "Image.gz"
+            fi
+          if [[ -f $OUT_DIR/arch/$ARCH/boot/Image ]]; then
+            cp $OUT_DIR/arch/$ARCH/boot/Image $ROOT/$KDIR/$ANYKERNEL_NAME/Image
           fi
-          if [[ -f $ROOT/$KDIR/$KNAME/$OUT_DIR/arch/$ARCH/boot/Image ]]; then
-            cp $ROOT/$KDIR/$KNAME/$OUT_DIR/arch/$ARCH/boot/Image $ROOT/$KDIR/$ANYKERNEL_NAME/Image
-          fi
-          cd $ROOT/$KDIR/$ANYKERNEL_NAME && zip -r9 Release-$KNAME-$DEVICE.zip *
+          cd $ANYKERNEL_NAME && zip -r9 Release-$KNAME-$DEVICE.zip *
           
           mkdir -p $ROOT/$KDIR/release
           mv Release-$KNAME-$DEVICE.zip $ROOT/$KDIR/release/Release-$KNAME-$DEVICE.zip
