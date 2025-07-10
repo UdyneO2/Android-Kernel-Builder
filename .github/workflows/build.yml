@@ -118,7 +118,7 @@ jobs:
             echo -e "Image.gz not found"
             fi
           if [[ -f $OUT_DIR/arch/$ARCH/boot/Image ]]; then
-            cp $OUT_DIR/arch/$ARCH/boot/Image $ROOT/$KDIR/$ANYKERNEL_NAME/Image
+            cp $OUT_DIR/arch/$ARCH/boot/Image $ANYKERNEL_NAME/Image
           fi
           cd $ANYKERNEL_NAME && zip -r9 Release-$KNAME-$DEVICE.zip *
           
