@@ -64,7 +64,6 @@ jobs:
       OUT_DIR: out
       XCLANG: ${{ inputs.CLANG }}
       ROOT: /home/runner/work
-      REL: ${{ inputs.REL }}
     steps:
       - name: "✨ Create working dir"
         run: mkdir -p $KDIR
@@ -122,20 +121,20 @@ jobs:
           fi
           cd $ANYKERNEL_NAME && zip -r9 Release-$KNAME-$DEVICE.zip *
           
-          mkdir -p $ROOT/$KDIR/release
-          mv Release-$KNAME-$DEVICE.zip $ROOT/$KDIR/release/Release-$KNAME-$DEVICE.zip
+          mkdir -p ~/release
+          mv Release-$KNAME-$DEVICE.zip ~/release/Release-${{ env.KNAME }}-${{ env.DEVICE }}.zip
           echo ""
-          echo -e "Upload Anykernel3.zip"
+          echo -e "Upload Release-${{ env.KNAME }}-${{ env.DEVICE }}.zip"
           echo ""
           
       - uses: softprops/action-gh-release@v2
         with:
          token: ${{ secrets.GH_TOKEN }}
-         repository: $REL
+         repository: ${{ inputs.REL }}
          files: |
-           $ROOT/$KDIR/release/Release-$KNAME-$DEVICE.zip
-         name: Update Kernel Build | ${{ env.ANYKERNEL_NAME }}-$DEVICE
-         tag_name: ${{ env.kernel }}/
+          ~/release/${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}.zip
+         name: Update Kernel Build | ${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}
+         tag_name: ${{ env.KNAME }}
          body: |
           ### Release Notes:
           * Kernel compiled using clang 11.0.1
@@ -151,6 +150,6 @@ jobs:
           * - bugs? tell [me](https://t.me/mnrdnn)
       - uses: actions/upload-artifact@v4
         with:
-          name: Release-$KNAME-$DEVICE
-          path: $ROOT/$KDIR/$ANYKERNEL_NAME/*
+          name: Release-${{ env.KNAME }}-${{ env.DEVICE }}
+          path: ${{ env.ROOT }}/${{ env.KDIR }}/${{ env.KNAME }}/${{ env.ANYKERNEL_NAME }}/*
 
