@@ -119,10 +119,8 @@ jobs:
           if [[ -f $OUT_DIR/arch/$ARCH/boot/Image ]]; then
             cp $OUT_DIR/arch/$ARCH/boot/Image $ANYKERNEL_NAME/Image
           fi
-          cd $ANYKERNEL_NAME && zip -r9 Release-${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}.zip *
-          
-          mkdir -p ~/release
-          mv Release-$KNAME-$DEVICE.zip ~/release/Release-${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}.zip
+          cd $ANYKERNEL_NAME && zip -r9 Release-${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}.zip
+          mv Release-$KNAME-$DEVICE.zip ../Release-${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}.zip
           echo ""
           echo -e "Upload Release-${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}.zip"
           echo ""
@@ -132,9 +130,9 @@ jobs:
          token: ${{ secrets.GH_TOKEN }}
          repository: ${{ inputs.REL }}
          files: |
-          ~/release/${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}.zip
+          ../${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}.zip
          name: Update Kernel Build | ${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }} | ${{ env.ROOT }}/${{ env.KDIR }}/${{ env.KNAME }}/${{ env.ANYKERNEL_NAME }}
-         tag_name: ${{ env.KNAME }}
+         tag_name: ${{ inputs.BR }}
          body: |
           ### Release Notes:
           * Kernel compiled using clang 11.0.1
@@ -151,5 +149,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: Release-${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}
-          path: ${{ env.ROOT }}/${{ env.KDIR }}/${{ env.KNAME }}/${{ env.ANYKERNEL_NAME }}/*
+          path: ${{ env.ANYKERNEL_NAME }}/*
 
