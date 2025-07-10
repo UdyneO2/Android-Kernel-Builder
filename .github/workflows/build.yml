@@ -122,9 +122,9 @@ jobs:
           cd $ANYKERNEL_NAME && zip -r9 Release-$KNAME-$DEVICE.zip *
           
           mkdir -p ~/release
-          mv Release-$KNAME-$DEVICE.zip ~/release/Release-${{ env.KNAME }}-${{ env.DEVICE }}.zip
+          mv Release-$KNAME-$DEVICE.zip ~/release/Release-${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}.zip
           echo ""
-          echo -e "Upload Release-${{ env.KNAME }}-${{ env.DEVICE }}.zip"
+          echo -e "Upload Release-${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}.zip"
           echo ""
           
       - uses: softprops/action-gh-release@v2
@@ -150,6 +150,6 @@ jobs:
           * - bugs? tell [me](https://t.me/mnrdnn)
       - uses: actions/upload-artifact@v4
         with:
-          name: Release-${{ env.KNAME }}-${{ env.DEVICE }}
+          name: Release-${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}
           path: ${{ env.ROOT }}/${{ env.KDIR }}/${{ env.KNAME }}/${{ env.ANYKERNEL_NAME }}/*
 
