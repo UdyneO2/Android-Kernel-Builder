@@ -5,11 +5,11 @@ on:
       BR:
         description: 'Kernel Branch'
         required: true
-        default: 'KSUN'        
+        default: 'stable'        
       TREE:
         description: 'Kernel Tree'
         required: true
-        default: 'https://github.com/UdyneO2/kernel_realme_RMX2195'
+        default: 'https://github.com/SM4250-Dev/kernel_realme_RMX2195'
       AK3:
         description: 'Anykernel Tree'
         required: true
@@ -58,7 +58,7 @@ jobs:
       ANYKERNEL_NAME: Anykernel3
       ANYKERNEL_SOURCE: ${{ inputs.AK3 }}
       ANYKERNEL_SOURCE_BRANCH: ${{ inputs.AK3_BR }}
-      DEFCONFIG_NAME: vendor/${{ inputs.DEVICE }}_defconfig
+      DEFCONFIG_NAME: ${{ inputs.DEVICE }}_defconfig
       withKSUN: ${{ inputs.KSU }}
       ARCH: arm64
       OUT_DIR: out
@@ -138,13 +138,7 @@ jobs:
           * Kernel compiled using clang 11.0.1
           * flash at your own risk.
           * Thanks [github](https://github.com)
-          * Use [branch](https://github.com/UdyneO2/kernel_realme_RMX2195/tree/KSUN)
-          
            ### Changelog ;
-          * - Add KernelSU-Next v1.0.8 Support
-          * - Add Susfs 1.5.8 support : Thanks to [sidex15](https://t.me/sidex15) - [Kernel Source](https://github.com/sidex15/kernel_realme_sm4250)
-          * - Enable uclamp
-          * - Add more gpucc-size
           * - bugs? tell [me](https://t.me/mnrdnn)
       - uses: actions/upload-artifact@v4
         with:
