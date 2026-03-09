@@ -30,6 +30,10 @@ on:
         description: 'Specify your Device Codename.'
         required: true
         default: 'RMX2195'
+      CONFIG:
+        description: 'defconfig'
+        required: true
+        default: 'vendor/RMX2195'
       KSU:
         description: 'KernelSU'
         required: true
@@ -58,7 +62,7 @@ jobs:
       ANYKERNEL_NAME: Anykernel3
       ANYKERNEL_SOURCE: ${{ inputs.AK3 }}
       ANYKERNEL_SOURCE_BRANCH: ${{ inputs.AK3_BR }}
-      DEFCONFIG_NAME: ${{ inputs.DEVICE }}_defconfig
+      DEFCONFIG_NAME: ${{ inputs.CONFIG }}_defconfig
       withKSUN: ${{ inputs.KSU }}
       ARCH: arm64
       OUT_DIR: out
