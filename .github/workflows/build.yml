@@ -25,7 +25,7 @@ on:
       NAME:
         description: 'Specify your kernel NAME.'
         required: true
-        default: 'RMX2195'
+        default: 'RMX2195-V1.1'
       DEVICE:
         description: 'Specify your Device Codename.'
         required: true
@@ -149,7 +149,7 @@ jobs:
          files: |
            /home/runner/work/upload/*.zip
          name: Update Kernel Build | ${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}
-         tag_name: ${{ inputs.BR }}
+         tag_name: ${{ inputs.BR }}-${{ env.KNAME }}
          body: |
           ### Release Notes:
           * Kernel compiled using clang 11.0.1
