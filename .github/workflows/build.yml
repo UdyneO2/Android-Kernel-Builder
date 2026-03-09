@@ -50,7 +50,7 @@ jobs:
       max-parallel: 2
       fail-fast: false
     env:
-      KDIR: dir_${{ inputs.NAME}}
+      KDIR: Kernel-Build
       KNAME: ${{ inputs.NAME}}
       kernelRepo: ${{ inputs.TREE }}
       kernelBranch: ${{ inputs.BR }}
@@ -89,6 +89,9 @@ jobs:
         run: |
           export KBUILD_BUILD_USER="mnrdnn"
           export KBUILD_BUILD_HOST="github"
+          export KBUILD_USER="mnrdnn"
+          export KBUILD_HOST="github"
+          export TZ="Asia/Jakarta"
           DATE="$(TZ=Asia/Jakarta date +%Y%m%d%H%M)"
           git clone $XCLANG ~/toolchains/clang --depth=1 
           export CLANG_PATH=~/toolchains/clang/bin
@@ -103,6 +106,7 @@ jobs:
           echo "Set DEFCONFIG"
           TIME="$(date "+%Y%m%d-%H%M%S")"
           START_TIME=$(date +%s)
+          echo $START_TIME > /tmp/start_time.txt
           echo 
           make CC=clang AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip O=out ${{ env.DEFCONFIG_NAME }}
           echo
@@ -112,7 +116,7 @@ jobs:
           echo
           echo "Build Succesfully"
           END_TIME=$(date +%s)
-          DURATION=$((END_TIME - START_TIME))
+          echo $END_TIME > /tmp/end_time.txt
           
           git clone --depth=1 $ANYKERNEL_SOURCE -b $ANYKERNEL_SOURCE_BRANCH $ANYKERNEL_NAME && rm -rf $ANYKERNEL_NAME/.git $ANYKERNEL_NAME/.github
           if [[ -f $OUT_DIR/arch/$ARCH/boot/Image.gz ]]; then
@@ -127,7 +131,7 @@ jobs:
           mv ${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}$TIME.zip /home/runner/work/upload
           cd ..
           echo ""
-          echo -e "Upload ${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}$TIME.zip"
+          echo -e "Upload ${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}-$TIME.zip"
           echo ""
       - name: "Notif tele"
         if : success()
@@ -136,12 +140,27 @@ jobs:
             export token=${{ secrets.TG_TOKEN }}
             export chat_id=${{ secrets.TG_ID }}
             export TID=${{ secrets.TG_TID }}
+            START_TIME=$(cat /tmp/start_time.txt)
+            END_TIME=$(cat /tmp/end_time.txt)
+            # Hitung durasi
+            DURATION=$((END_TIME - START_TIME))
+            DURATION_FORMATTED=$(printf '%02d:%02d:%02d' $((DURATION/3600)) $((DURATION%3600/60)) $((DURATION%60)))
+    
+            CURRENT_TIME="$(date "+%Y%m%d-%H%M%S")"
             tg() {
                 echo "- Sending message ..."
                 curl -sX POST https://api.telegram.org/bot"${token}"/sendMessage -d chat_id="${chat_id}" -d message_thread_id="${TID}" -d parse_mode=Markdown -d disable_web_page_preview=true -d text="$1" &>/dev/null
                  }
-            tg "Upload Kernel Status : Builded at $TIME : $DURATION at $kernelRepo"
-          
+            PESAN="*Upload Kernel Status* : Success ✅
+            *Waktu Notifikasi* : \`$CURRENT_TIME\`
+            *Waktu Build* : 
+            • Start : \`$(date -d @$START_TIME "+%Y-%m-%d %H:%M:%S")\`
+            • End   : \`$(date -d @$END_TIME "+%Y-%m-%d %H:%M:%S")\`
+            • Durasi: \`$DURATION_FORMATTED\`
+
+            🔗 *Link Repository* : [Klik disini](https://github.com/${{ inputs.REL }}/releases/tag/${{ env.KNAME }})"
+    
+            tg "$PESAN"
       - uses: softprops/action-gh-release@v2
         with:
          token: ${{ secrets.GH_TOKEN }}
@@ -149,7 +168,7 @@ jobs:
          files: |
            /home/runner/work/upload/*.zip
          name: Update Kernel Build | ${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}
-         tag_name: ${{ inputs.BR }}-${{ env.KNAME }}
+         tag_name: ${{ env.KNAME }}
          body: |
           ### Release Notes:
           * Kernel compiled using clang 11.0.1
