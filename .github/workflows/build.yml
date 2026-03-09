@@ -89,6 +89,7 @@ jobs:
         run: |
           export KBUILD_BUILD_USER="mnrdnn"
           export KBUILD_BUILD_HOST="github"
+          DATE="$(TZ=Asia/Jakarta date +%Y%m%d%H%M)"
           git clone $XCLANG ~/toolchains/clang --depth=1 
           export CLANG_PATH=~/toolchains/clang/bin
           export PATH=${CLANG_PATH}:${PATH}
@@ -100,14 +101,18 @@ jobs:
           echo "PATH Variable: $PATH"
           echo
           echo "Set DEFCONFIG"
+          TIME="$(date "+%Y%m%d-%H%M%S")"
+          START_TIME=$(date +%s)
           echo 
           make CC=clang AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip O=out ${{ env.DEFCONFIG_NAME }}
           echo
-          echo "Set DEFCONFIG"
+          echo "Start building"
           echo 
           make CC=clang AR=llvm-ar NM=llvm-nm OBJCOPY=llvm-objcopy OBJDUMP=llvm-objdump STRIP=llvm-strip O=out -j$(nproc --all)
           echo
           echo "Build Succesfully"
+          END_TIME=$(date +%s)
+          DURATION=$((END_TIME - START_TIME))
           
           git clone --depth=1 $ANYKERNEL_SOURCE -b $ANYKERNEL_SOURCE_BRANCH $ANYKERNEL_NAME && rm -rf $ANYKERNEL_NAME/.git $ANYKERNEL_NAME/.github
           if [[ -f $OUT_DIR/arch/$ARCH/boot/Image.gz ]]; then
@@ -117,16 +122,25 @@ jobs:
             echo -e "Image.gz found"
           else
             echo -e "Image.gz not found"
-            fi
-          if [[ -f $OUT_DIR/arch/$ARCH/boot/Image ]]; then
-            cp $OUT_DIR/arch/$ARCH/boot/Image $ANYKERNEL_NAME/Image
           fi
-          cd $ANYKERNEL_NAME && zip -r9 Release-${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}.zip * -x .git README.md *placeholder
-          mv Release-${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}.zip /home/runner/work/upload
+          cd $ANYKERNEL_NAME && zip -r9 ${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}$TIME.zip * -x .git README.md *placeholder
+          mv ${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}$TIME.zip /home/runner/work/upload
           cd ..
           echo ""
-          echo -e "Upload Release-${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}.zip"
+          echo -e "Upload ${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}$TIME.zip"
           echo ""
+      - name: "Notif tele"
+        if : success()
+        working-directory: ./${{ env.KDIR }}/${{ env.KNAME }}
+        run: |
+            export token=${{ secrets.TG_TOKEN }}
+            export chat_id=${{ secrets.TG_ID }}
+            export TID=${{ secrets.TG_TID }}
+            tg() {
+                echo "- Sending message ..."
+                curl -sX POST https://api.telegram.org/bot"${token}"/sendMessage -d chat_id="${chat_id}" -d message_thread_id="${TID}" -d parse_mode=Markdown -d disable_web_page_preview=true -d text="$1" &>/dev/null
+                 }
+            tg "Upload Kernel Status : Builded at $TIME : $DURATION at $kernelRepo"
           
       - uses: softprops/action-gh-release@v2
         with:
@@ -139,12 +153,11 @@ jobs:
          body: |
           ### Release Notes:
           * Kernel compiled using clang 11.0.1
-          * flash at your own risk.
           * Thanks [github](https://github.com)
            ### Changelog ;
           * - bugs? [tell me](https://t.me/mnrdnn)
       - uses: actions/upload-artifact@v4
         with:
-          name: Release-${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}
+          name: ${{ env.ANYKERNEL_NAME }}-${{ env.DEVICE }}
           path: /home/runner/work/upload/kernel/
 
